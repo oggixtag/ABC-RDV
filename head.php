@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php require_once 'constants.php'; ?>
+    <title><?=CONST_TITRE_DU_SITE?></title>
+    <link rel="stylesheet" href="styles.css">
+</head>
