@@ -1,12 +1,11 @@
 /*
-Executer ce script autant que root.
-
 Creation de l'utilisateur adminstrateur pour la base de données MariaDB du projet ABC-RDV.
 
-utilisateur : db-abc-rdv-prd-useradm
-mot de passe : db-abc-rdv-prd-useradm
+Il faut executer le script avec l'utilisateur ayant les droits create CREATE USER et GRANT ALL PRIVILEGES 
 */
 
-CREATE USER 'db-abc-rdv-prd-useradm'@'%' IDENTIFIED VIA mysql_native_password USING 'db-abc-rdv-prd-useradm';
-GRANT ALL PRIVILEGES ON *.* TO 'abc-rdv-prd-useradm'@'%' REQUIRE NONE WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
-GRANT ALL PRIVILEGES ON `abc-rdv-prd`.* TO 'abc-rdv-prd-useradm'@'%';
+CREATE USER 'abc_rdv_prd_useradm'@'%' IDENTIFIED BY '*E8D46CE25265E545D225A8A6F1BAF642FEBEE5CB';
+
+GRANT ALL PRIVILEGES ON *.* TO 'abc_rdv_prd_useradm'@'%' ;
+
+GRANT ALL PRIVILEGES ON abc_rdv_bd_prd.* TO 'abc_rdv_prd_useradm'@'%';
