@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS abc_rdv_prd_db.services (
     description TEXT
 );
 
--- Création de la table 'professionnel_services' pour gérer la relation plusieurs-à-plusieurs entre 'Professionnels' et 'Services'
+-- Création de la table 'professionnel_services' pour gérer la relation plusieurs-à-plusieurs entre 'professionnels' et 'services'
 CREATE TABLE IF NOT EXISTS abc_rdv_prd_db.professionnel_services (
     professionnel_id INT NOT NULL,
     service_id INT NOT NULL,
