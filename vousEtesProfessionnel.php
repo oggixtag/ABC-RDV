@@ -16,9 +16,9 @@
 
 // Configuration de la base de données
 $host = "localhost";
-$user = "";
+$user = "abc_rdv_prd_useradm";
 $password = "";
-$dbname = "";
+$dbname = "abc_rdv_prd_db";
 
 // Message de statut
 $message_statut = '';
@@ -168,6 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 end_script:
+
 // Récupérer la liste des services pour le formulaire
 $sql_services = "SELECT service_id, nom_service FROM services ORDER BY nom_service";
 $resultat_services = $connexion->query($sql_services);

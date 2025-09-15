@@ -25,6 +25,20 @@ JOIN abc_rdv_prd_db.services s ON ps.service_id = s.service_id
 WHERE
     s.nom_service = 'Coloration';
 
+-- Cette requête combine les deux critères : professionnels dans une ville spécifique et leur services
+SELECT
+    p.nom,
+    p.adresse,
+    s.nom_service,
+    s.description
+FROM abc_rdv_prd_db.professionnels p
+JOIN abc_rdv_prd_db.villes v ON p.ville_id = v.ville_id
+JOIN abc_rdv_prd_db.professionnel_services ps ON p.professionnel_id = ps.professionnel_id
+JOIN abc_rdv_prd_db.services s ON ps.service_id = s.service_id
+WHERE
+    v.nom_ville = ?
+ORDER BY p.nom,s.nom_service ;
+
 
 
 -- 2. GESTION DES RENDEZ-VOUS
@@ -56,6 +70,8 @@ WHERE
     r.professionnel_id = 1 AND r.date_reservation = '2023-10-27'
 ORDER BY
     r.heure_reservation ASC;
+
+
 
 -- 3. STATISTIQUES ET ANALYSES
 -- Cette requête calcule la note moyenne d'un professionnel basé sur tous les avis

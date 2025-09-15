@@ -1,305 +1,135 @@
 /*
-Executer ce script autant que abc_rdv_prd_useradm ou abc_rdv_prd_userapf.
 Ce script permet d'insérer des données d'exemple dans les tables d'une base de données MariaDB pour le projet ABC-RDV. 
 Le script est conçu pour être exécuté dans un environnement de production, abc_rdv_prd_db.
-Il insère des données dans les tables villes, clients, professionnels, services et reservations.
+Il insère des données dans les tables villes, clients, professionnels, membres_equipe, services et reservations.
 Il est important de noter que ce script suppose que les tables existent déjà et qu'elles sont vides avant l'insertion des données.
 Il faut executer le script avec l'utilisateur ayant les droits d'insertion sur les tables.
+Executer ce script autant que abc_rdv_prd_useradm ou abc_rdv_prd_userapf.
 */
 
 /*
 Ce script ne contient pas COMMIT final !
 */
 
--- Insertion de 10 enregistrements dans la table 'villes'
-INSERT INTO abc_rdv_prd_db.villes (nom_ville) VALUES
-('Paris'),
-('Lyon'),
-('Marseille'),
-('Nice'),
-('Bordeaux'),
-('Lille'),
-('Strasbourg'),
-('Toulouse'),
-('Nantes'),
-('Rennes');
+USE abc_rdv_prd_db;
 
--- Insertion de 50 enregistrements dans la table 'clients'
-INSERT INTO abc_rdv_prd_db.clients (nom, email) VALUES
-('Jean Dupont', 'jean.dupont@email.com'),
-('Marie Dubois', 'marie.dubois@email.com'),
-('Pierre Martin', 'pierre.martin@email.com'),
-('Sophie Leroy', 'sophie.leroy@email.com'),
-('Lucie Bernard', 'lucie.bernard@email.com'),
-('Thomas Petit', 'thomas.petit@email.com'),
-('Amandine Moreau', 'amandine.moreau@email.com'),
-('Nicolas Garcia', 'nicolas.garcia@email.com'),
-('Emma Robert', 'emma.robert@email.com'),
-('Mathieu Durand', 'mathieu.durand@email.com'),
-('Chloé Lefevre', 'chloe.lefevre@email.com'),
-('Antoine Simon', 'antoine.simon@email.com'),
-('Camille Michel', 'camille.michel@email.com'),
-('Alexandre Leclerc', 'alexandre.leclerc@email.com'),
-('Alice Fournier', 'alice.fournier@email.com'),
-('Guillaume Lemoine', 'guillaume.lemoine@email.com'),
-('Julia Roux', 'julia.roux@email.com'),
-('Julien Boyer', 'julien.boyer@email.com'),
-('Laura Dubois', 'laura.dubois@email.com'),
-('Maxime Lambert', 'maxime.lambert@email.com'),
-('Océane Richard', 'oceane.richard@email.com'),
-('Paul Durand', 'paul.durand@email.com'),
-('Quentin Petit', 'quentin.petit@email.com'),
-('Romain Lebrun', 'romain.lebrun@email.com'),
-('Sarah Vincent', 'sarah.vincent@email.com'),
-('Simon Roux', 'simon.roux@email.com'),
-('Tom Michel', 'tom.michel@email.com'),
-('Victor Lemoine', 'victor.lemoine@email.com'),
-('Yannick Fournier', 'yannick.fournier@email.com'),
-('Zoe Mercier', 'zoe.mercier@email.com'),
-('Arthur Petit', 'arthur.petit@email.com'),
-('Caroline Dubois', 'caroline.dubois@email.com'),
-('Damien Lambert', 'damien.lambert@email.com'),
-('Émilie Rousseau', 'emilie.rousseau@email.com'),
-('Gabriel Simon', 'gabriel.simon@email.com'),
-('Inès Garnier', 'ines.garnier@email.com'),
-('Jérémy Lebrun', 'jeremy.lebrun@email.com'),
-('Justine Leroy', 'justine.leroy@email.com'),
-('Léa Martin', 'lea.martin@email.com'),
-('Louis Robert', 'louis.robert@email.com'),
-('Manon Garcia', 'manon.garcia@email.com'),
-('Noémie Bernard', 'noemie.bernard@email.com'),
-('Oscar Michel', 'oscar.michel@email.com'),
-('Philippine Richard', 'philippine.richard@email.com'),
-('Raphaël Morel', 'raphael.morel@email.com'),
-('Solène Dubois', 'solene.dubois@email.com'),
-('Tanguy Roux', 'tanguy.roux@email.com'),
-('Ursula Leclerc', 'ursula.leclerc@email.com'),
-('Vincent Boyer', 'vincent.boyer@email.com'),
-('Yanis Leblanc', 'yanis.leblanc@email.com');
+-- 1. Insertion dans la table 'Villes'
+INSERT INTO villes (nom_ville) VALUES
+('Paris'), ('Lyon'), ('Marseille'), ('Bordeaux'), ('Toulouse'),
+('Nice'), ('Nantes'), ('Strasbourg'), ('Lille'), ('Rennes'),
+('Montpellier'), ('Grenoble'), ('Rouen'), ('Reims'), ('Tours'),
+('Aix-en-Provence'), ('Limoges'), ('Dijon'), ('Le Havre'), ('Saint-Étienne');
 
--- Insertion de 50 enregistrements dans la table 'professionnels'
-INSERT INTO abc_rdv_prd_db.professionnels (nom, adresse, telephone, email, agenda, notes, ville_id) VALUES
-('Le Salon Chic', '12 rue de la Paix'				,'0670485932','info1@email.com',   	'{"lundi": "9h-18h"}', 'Spécialiste en coupes modernes', (SELECT ville_id FROM villes WHERE nom_ville = 'Paris')),
-('Tendance Coiffure', '5 rue des Lilas'				,'0670485932','inf@email.com',   	'{"mardi": "10h-19h"}', 'Meilleur salon pour les brushings', (SELECT ville_id FROM villes WHERE nom_ville = 'Lyon')),
-('L\'Atelier de Camille', '45 avenue des Champs'	,'0670485932','ino@email.com', 	'{"mercredi": "8h-17h"}', 'Maître coloriste', (SELECT ville_id FROM villes WHERE nom_ville = 'Marseille')),
-('Artisan Coiffeur', '92 rue du Faubourg'			,'0670485932','in@email.com',   	'{"jeudi": "11h-20h"}', 'Expert en coiffure masculine', (SELECT ville_id FROM villes WHERE nom_ville = 'Nice')),
-('Style Urbain', '23 rue de la République'			,'0670485932','inqfo@email.com',   	'{"vendredi": "9h-18h"}', 'Ambiance jeune et dynamique', (SELECT ville_id FROM villes WHERE nom_ville = 'Bordeaux')),
-('Salon Beauté', '34 rue Victor Hugo'				,'0670485932','invfo@email.com',   	'{"lundi": "10h-19h"}', 'Soins pour tous types de cheveux', (SELECT ville_id FROM villes WHERE nom_ville = 'Lille')),
-('Coupes et Couleurs', '18 rue Nationale'			,'0670485932','infoee@email.com',   	'{"mardi": "9h-18h"}', 'Produits bio et naturels', (SELECT ville_id FROM villes WHERE nom_ville = 'Strasbourg')),
-('Barber Shop', '7 avenue Foch'						,'0670485932','infoq@email.com',   	'{"mercredi": "10h-19h"}', 'Taille de barbe traditionnelle', (SELECT ville_id FROM villes WHERE nom_ville = 'Toulouse')),
-('Le Coiffeur', '67 rue de la Gare'					,'0670485932','infok@email.com',   	'{"jeudi": "9h-18h"}', 'Coiffure classique et élégante', (SELECT ville_id FROM villes WHERE nom_ville = 'Nantes')),
-('Cheveux d\'Or', '81 rue de l\'Étoile'				,'0670485932','infou@email.com',   	'{"vendredi": "10h-19h"}', 'Spécialiste du blond polaire', (SELECT ville_id FROM villes WHERE nom_ville = 'Rennes')),
-('Glamour Coiffure', '15 rue Gambetta'				,'0670485932','infoy@email.com',   	'{"samedi": "9h-18h"}', 'Coiffure de mariée sur-mesure', (SELECT ville_id FROM villes WHERE nom_ville = 'Paris')),
-('Beauté Moderne', '10 rue Voltaire'				,'0670485932','infot@email.com',   	'{"dimanche": "10h-17h"}', 'Techniques de coloration avancées', (SELECT ville_id FROM villes WHERE nom_ville = 'Lyon')),
-('Espace Coiffure', '22 place des Martyrs'			,'0670485932','infoer@email.com',   	'{"lundi": "8h-18h"}', 'Rapide et efficace', (SELECT ville_id FROM villes WHERE nom_ville = 'Marseille')),
-('Le Salon', '40 boulevard Carnot'					,'0670485932','infoe@email.com',   	'{"mardi": "9h-19h"}', 'Des mèches lumineuses', (SELECT ville_id FROM villes WHERE nom_ville = 'Nice')),
-('Le Monde de la Coiffure', '55 rue de l\'Alma'		,'0670485932','infoz@email.com',   	'{"mercredi": "10h-18h"}', 'Lissage brésilien longue durée', (SELECT ville_id FROM villes WHERE nom_ville = 'Bordeaux')),
-('L\'Expert Cheveux', '31 rue Saint-Jean'			,'0670485932','infondr@email.com',   	'{"jeudi": "9h-17h"}', 'Soins profonds et extensions de qualité', (SELECT ville_id FROM villes WHERE nom_ville = 'Lille')),
-('Hair Style', '4 rue Colbert'						,'0670485932','info21@email.com',   	'{"vendredi": "10h-19h"}', 'Pour un style impeccable', (SELECT ville_id FROM villes WHERE nom_ville = 'Strasbourg')),
-('Barbier Moderne', '8 rue Thiers'					,'0670485932','info2@email.com',   	'{"lundi": "9h-18h"}', 'Taille de barbe avec serviette chaude', (SELECT ville_id FROM villes WHERE nom_ville = 'Toulouse')),
-('Coiffure Passion', '14 rue du Commerce'			,'0670485932','info3@email.com',   	'{"mardi": "10h-19h"}', 'L\'art de la coiffure', (SELECT ville_id FROM villes WHERE nom_ville = 'Nantes')),
-('Le Salon des Tendances', '28 rue de la Fontaine'	,'0670485932','info4@email.com',   	'{"mercredi": "9h-18h"}', 'À la pointe des tendances', (SELECT ville_id FROM villes WHERE nom_ville = 'Rennes')),
-('Votre Coiffeur', '3 rue de la Paix'				,'0670485932','news@email.com',   	'{"jeudi": "11h-20h"}', 'Une équipe à votre écoute', (SELECT ville_id FROM villes WHERE nom_ville = 'Paris')),
-('Les Ciseaux d\'Or', '17 rue des Lilas'			,'0670485932','contact@email.com',   	'{"vendredi": "9h-18h"}', 'Brushing parfait garanti', (SELECT ville_id FROM villes WHERE nom_ville = 'Lyon')),
-('L\'Atelier de Sophie', '41 avenue des Champs'		,'0670485932','infott@email.com',   	'{"samedi": "10h-19h"}', 'Spécialiste des cheveux longs', (SELECT ville_id FROM villes WHERE nom_ville = 'Marseille')),
-('Salon Le Magnifique', '98 rue du Faubourg'		,'0670485932','info44@email.com',   	'{"dimanche": "10h-17h"}', 'Pour un look soigné', (SELECT ville_id FROM villes WHERE nom_ville = 'Nice')),
-('Coiffure Classique', '27 rue de la République'	,'0670485932','infdsq45o@email.com',   	'{"lundi": "8h-18h"}', 'Coupe classique et intemporelle', (SELECT ville_id FROM villes WHERE nom_ville = 'Bordeaux')),
-('Salon des Rêves', '39 rue Victor Hugo'			,'0670485932','info6@email.com',   	'{"mardi": "9h-19h"}', 'Pour des cheveux de rêve', (SELECT ville_id FROM villes WHERE nom_ville = 'Lille')),
-('Maître Coiffeur', '12 rue Nationale'				,'0670485932','info7@email.com',   	'{"mercredi": "10h-18h"}', 'Formé aux dernières techniques', (SELECT ville_id FROM villes WHERE nom_ville = 'Strasbourg')),
-('Barbier de France', '7 avenue Foch'				,'0670485932','info8@email.com',   	'{"jeudi": "9h-17h"}', 'Service sur rendez-vous', (SELECT ville_id FROM villes WHERE nom_ville = 'Toulouse')),
-('Coiffure Élégance', '68 rue de la Gare'			,'0670485932','infovb@email.com',   	'{"vendredi": "10h-19h"}', 'Coiffure pour toutes les occasions', (SELECT ville_id FROM villes WHERE nom_ville = 'Nantes')),
-('Couleur Lumière', '83 rue de l\'Étoile'			,'0670485932','infon@email.com',   	'{"lundi": "9h-18h"}', 'Mèches et balayages personnalisés', (SELECT ville_id FROM villes WHERE nom_ville = 'Rennes')),
-('L\'instant Coiffure', '15 rue Gambetta'			,'0670485932','infao@email.com',   	'{"mardi": "10h-19h"}', 'Coiffure de mariée et de cérémonie', (SELECT ville_id FROM villes WHERE nom_ville = 'Paris')),
-('Beauté d\'Aujourd\'hui', '10 rue Voltaire'		,'0670485932','infoa@email.com',   	'{"mercredi": "8h-17h"}', 'Un style qui vous ressemble', (SELECT ville_id FROM villes WHERE nom_ville = 'Lyon')),
-('Espace Beauté', '22 place des Martyrs'			,'0670485932','info55@email.com',   	'{"jeudi": "11h-20h"}', 'Un moment de détente', (SELECT ville_id FROM villes WHERE nom_ville = 'Marseille')),
-('Le Salon Prestige', '40 boulevard Carnot'			,'0670485932','info78@email.com',   	'{"vendredi": "9h-18h"}', 'Des cheveux sublimes', (SELECT ville_id FROM villes WHERE nom_ville = 'Nice')),
-('Le Coiffeur du Coin', '55 rue de l\'Alma'			,'0670485932','info9@email.com',   	'{"samedi": "10h-19h"}', 'Pour toute la famille', (SELECT ville_id FROM villes WHERE nom_ville = 'Bordeaux')),
-('L\'art de la Coiffure', '31 rue Saint-Jean'		,'0670485932','infoyt@email.com',   	'{"dimanche": "10h-17h"}', 'Des extensions de rêve', (SELECT ville_id FROM villes WHERE nom_ville = 'Lille')),
-('Le Barbier', '4 rue Colbert'						,'0670485932','infot7@email.com',   	'{"lundi": "8h-18h"}', 'Le meilleur barbier de la ville', (SELECT ville_id FROM villes WHERE nom_ville = 'Strasbourg')),
-('Coiffure du Monde', '8 rue Thiers'				,'0670485932','infoml1@email.com',   	'{"mardi": "9h-19h"}', 'Une barbe parfaite en 30 minutes', (SELECT ville_id FROM villes WHERE nom_ville = 'Toulouse')),
-('Le Salon Éco', '14 rue du Commerce'				,'0670485932','infoi2@email.com',   	'{"mercredi": "10h-18h"}', 'Produits écologiques', (SELECT ville_id FROM villes WHERE nom_ville = 'Nantes')),
-('Le Salon Pro', '28 rue de la Fontaine'			,'0670485932','infoqa@email.com',   	'{"jeudi": "9h-17h"}', 'Une équipe de professionnels', (SELECT ville_id FROM villes WHERE nom_ville = 'Rennes')),
-('Coiffure à Domicile', '20 rue des Arts'			,'0670485932','infoqw@email.com',   	'{"vendredi": "10h-19h"}', 'Service à domicile', (SELECT ville_id FROM villes WHERE nom_ville = 'Paris')),
-('Les Maîtres Coiffeurs', '19 rue de la Poste'		,'0670485932','infosq@email.com',   	'{"samedi": "9h-18h"}', 'Un service impeccable', (SELECT ville_id FROM villes WHERE nom_ville = 'Lyon')),
-('La Coiffure Idéale', '33 avenue Jean Jaurès'		,'0670485932','infolq@email.com',   	'{"dimanche": "10h-17h"}', 'Le lissage parfait', (SELECT ville_id FROM villes WHERE nom_ville = 'Marseille')),
-('Salon des Anges', '65 rue du Jardin'				,'0670485932','infoap@email.com',   	'{"lundi": "8h-18h"}', 'Pour un look d\'ange', (SELECT ville_id FROM villes WHERE nom_ville = 'Nice')),
-('Le Salon du Port', '1 rue du Port'				,'0670485932','infovn@email.com',   	'{"mardi": "9h-19h"}', 'Face à la mer', (SELECT ville_id FROM villes WHERE nom_ville = 'Bordeaux')),
-('Barber House', '5 rue de la Liberté'				,'0670485932','infob5@email.com',   	'{"mercredi": "10h-18h"}', 'Le temple de la barbe', (SELECT ville_id FROM villes WHERE nom_ville = 'Lille')),
-('Le Salon Vintage', '11 rue Saint-Michel'			,'0670485932','infon9@email.com',   	'{"jeudi": "9h-17h"}', 'Un style rétro', (SELECT ville_id FROM villes WHERE nom_ville = 'Strasbourg')),
-('L\'Art de la Beauté', '27 rue des Lilas'			,'0670485932','infoy5@email.com',   	'{"vendredi": "10h-19h"}', 'Des soins en profondeur', (SELECT ville_id FROM villes WHERE nom_ville = 'Toulouse')),
-('Le Salon de Marie', '77 rue de la Paix'			,'0670485932','infoy3@email.com',   	'{"lundi": "9h-18h"}', 'Mèches et balayages', (SELECT ville_id FROM villes WHERE nom_ville = 'Nantes')),
-('Coiffure Excellence', '99 rue de la Gare'			,'0670485932','infoy2@email.com',   	'{"mardi": "10h-19h"}', 'Un service d\'excellence', (SELECT ville_id FROM villes WHERE nom_ville = 'Rennes')),
-('Le Salon Coquette', '10 rue de la Rose'			,'0670485932','infoy44@email.com',   	'{"lundi": "9h-18h"}', 'Spécialiste en coupes pour femmes', (SELECT ville_id FROM villes WHERE nom_ville = 'Paris')),
-('Salon d\'Art', '22 place des Arts'				,'0670485932','infocvcn@email.com',   	'{"mardi": "10h-19h"}', 'Meilleur salon pour les brushings', (SELECT ville_id FROM villes WHERE nom_ville = 'Lyon')),
-('L\'Atelier du Style', '30 avenue du Soleil'		,'0670485932','infno@email.com',   	'{"mercredi": "8h-17h"}', 'Maître coloriste', (SELECT ville_id FROM villes WHERE nom_ville = 'Marseille')),
-('Coiffeur Expert', '56 rue du Port'				,'0670485932','info@email.com',   	'{"jeudi": "11h-20h"}', 'Expert en coiffure masculine', (SELECT ville_id FROM villes WHERE nom_ville = 'Nice')),
-('Coiffure Tendance', '15 rue de la Gare'			,'0670485932','infcno@email.com',   	'{"vendredi": "9h-18h"}', 'Ambiance jeune et dynamique', (SELECT ville_id FROM villes WHERE nom_ville = 'Bordeaux')),
-('Salon de la Beauté', '8 rue de la Mairie'			,'0670485932','infom@email.com',   	'{"lundi": "10h-19h"}', 'Soins pour tous types de cheveux', (SELECT ville_id FROM villes WHERE nom_ville = 'Lille')),
-('Le Ciseau d\'Or', '12 avenue de la Liberté'		,'0670485932','ineazrfo@email.com',   	'{"mardi": "9h-18h"}', 'Produits bio et naturels', (SELECT ville_id FROM villes WHERE nom_ville = 'Strasbourg')),
-('Barbier de Luxe', '25 rue de la Plage'			,'0670485932','ienfo@email.com',   	'{"mercredi": "10h-19h"}', 'Taille de barbe traditionnelle', (SELECT ville_id FROM villes WHERE nom_ville = 'Toulouse')),
-('Le Coiffeur de la Cité', '40 rue du Marché'		,'0670485932','inf0@email.com',   	'{"jeudi": "9h-18h"}', 'Coiffure classique et élégante', (SELECT ville_id FROM villes WHERE nom_ville = 'Nantes')),
-('Cheveux de Rêve', '70 rue du Canal'				,'0670485932','1nfo@email.com',   	'{"vendredi": "10h-19h"}', 'Spécialiste du blond polaire', (SELECT ville_id FROM villes WHERE nom_ville = 'Rennes'));
+-- 2. Insertion dans la table 'professionnels'
+INSERT INTO professionnels (nom, adresse, telephone, email, notes, ville_id) VALUES
+('Salon de la Beauté', '12 Rue de Rivoli', '0123456789', 'salon-beaute@email.fr', 'Spécialiste en coiffure et soins', (SELECT ville_id FROM villes WHERE nom_ville = 'Paris')),
+('Coupe Parfaite', '25 Avenue des Champs-Élysées', '0123456790', 'coupe-parfaite@email.fr', 'Salon de coiffure moderne', (SELECT ville_id FROM villes WHERE nom_ville = 'Paris')),
+('Le Barbier Élégant', '8 Rue du Faubourg Saint-Honoré', '0123456791', 'barbier-elegant@email.fr', 'Barbier et soins de la barbe', (SELECT ville_id FROM villes WHERE nom_ville = 'Paris')),
+('Maison de la Coiffure', '50 Rue du Président Edouard Herriot', '0412345678', 'maison-coiffure@email.fr', 'Salon de luxe à Lyon', (SELECT ville_id FROM villes WHERE nom_ville = 'Lyon')),
+('Style & Chic', '15 Rue de la République', '0412345679', 'style-chic@email.fr', 'Expertise en coloration', (SELECT ville_id FROM villes WHERE nom_ville = 'Marseille')),
+('L\'Artisan Coiffeur', '33 Rue Sainte-Catherine', '0545678901', 'artisan-coiffeur@email.fr', 'Coupes classiques et modernes', (SELECT ville_id FROM villes WHERE nom_ville = 'Bordeaux')),
+('Atelier Beauté', '42 Allée Jean Jaurès', '0545678902', 'atelier-beaute@email.fr', 'Espace de bien-être et beauté', (SELECT ville_id FROM villes WHERE nom_ville = 'Toulouse')),
+('Le Balayage Doré', '8 Rue de France', '0456789012', 'balayage-dore@email.fr', 'Spécialiste du balayage', (SELECT ville_id FROM villes WHERE nom_ville = 'Nice')),
+('Tendance Coiffure', '1 Place du Commerce', '0234567890', 'tendance-coiffure@email.fr', 'À la pointe des tendances', (SELECT ville_id FROM villes WHERE nom_ville = 'Nantes')),
+('La Coupe Urbaine', '10 Rue des Grandes Arcades', '0345678901', 'coupe-urbaine@email.fr', 'Coiffure mixte et stylisme', (SELECT ville_id FROM villes WHERE nom_ville = 'Strasbourg')),
+('Coiffure & Compagnie', '20 Rue Esquermoise', '0345678902', 'coiffure-cie@email.fr', 'Salon familial', (SELECT ville_id FROM villes WHERE nom_ville = 'Lille')),
+('L\'Étoile de la Beauté', '30 Rue d\'Antrain', '0234567891', 'etoile-beaute@email.fr', 'Services complets de beauté', (SELECT ville_id FROM villes WHERE nom_ville = 'Rennes')),
+('Le Coiffeur du Sud', '5 Rue de la Loge', '0456789013', 'coiffeur-sud@email.fr', 'Atmosphère détendue', (SELECT ville_id FROM villes WHERE nom_ville = 'Montpellier')),
+('Le Pinceau Magique', '22 Rue des Clercs', '0456789014', 'pinceau-magique@email.fr', 'Maquillage et coiffure de soirée', (SELECT ville_id FROM villes WHERE nom_ville = 'Grenoble')),
+('Salon Créatif', '7 Rue du Gros Horloge', '0234567892', 'salon-creatif@email.fr', 'Coupe et couleur personnalisées', (SELECT ville_id FROM villes WHERE nom_ville = 'Rouen')),
+('Harmonie Capillaire', '14 Place Drouet d\'Erlon', '0345678903', 'harmonie-capillaire@email.fr', 'Soins capillaires profonds', (SELECT ville_id FROM villes WHERE nom_ville = 'Reims')),
+('Art et Cheveux', '36 Rue Nationale', '0234567893', 'art-et-cheveux@email.fr', 'Salon d\'artiste', (SELECT ville_id FROM villes WHERE nom_ville = 'Tours')),
+('L\'Instant Parfait', '2 Rue du 4 Septembre', '0456789015', 'instant-parfait@email.fr', 'Coiffure de mariage', (SELECT ville_id FROM villes WHERE nom_ville = 'Aix-en-Provence')),
+('Le Salon du Port', '18 Quai Notre Dame', '0234567894', 'salon-port@email.fr', 'Spécialiste des cheveux courts', (SELECT ville_id FROM villes WHERE nom_ville = 'Le Havre')),
+('Beauté Moderne', '1 Place du Peuple', '0456789016', 'beaute-moderne@email.fr', 'Coupe et style pour hommes', (SELECT ville_id FROM villes WHERE nom_ville = 'Saint-Étienne'));
 
+-- 3. Insertion dans la table 'membres_equipe'
+INSERT INTO membres_equipe (nom_membre, professionnel_id) VALUES
+('Julie Dupont', 1), ('Marc Lefevre', 1), ('Sophie Bernard', 1), ('David Martin', 2), ('Emilie Durand', 2), ('Pierre Dubois', 3), ('Laura Petit', 3),
+('Alexandre Rousseau', 4), ('Caroline Blanc', 5), ('Nicolas Lambert', 6), ('Marie Leroy', 7), ('Thomas Moreau', 8), ('Clara Fournier', 9),
+('Lucas Girard', 10), ('Amélie Bonnet', 11), ('Fabien Garcia', 12), ('Chloé Roux', 13), ('Vincent Chen', 14), ('Manon Lopez', 15), ('Hugo Sanchez', 16);
 
+-- 4. Insertion dans la table 'services'
+INSERT INTO services (nom_service, description) VALUES
+('Coupe homme', 'Coupe et coiffage pour homme'), ('Coupe femme', 'Coupe et coiffage pour femme'),
+('Coloration', 'Application d\'une coloration complète'), ('Mèches', 'Création de mèches lumineuses'),
+('Balayage', 'Technique d\'éclaircissement naturelle'), ('Soin Kératine', 'Soin profond à la kératine'),
+('Barbe', 'Taille et entretien de la barbe'), ('Coiffure de soirée', 'Coiffure élégante pour événements'),
+('Lissage brésilien', 'Lissage durable et soin intense'), ('Extensions de cheveux', 'Ajout de volume et longueur'),
+('Brushing', 'Mise en forme des cheveux au sèche-cheveux'), ('Ombré hair', 'Effet dégradé de couleur'),
+('Défrisage', 'Traitement pour défriser les cheveux'), ('Soin Hydratant', 'Masque hydratant pour cheveux secs'),
+('Shampoing', 'Nettoyage professionnel des cheveux'), ('Soins du cuir chevelu', 'Traitements spécifiques'),
+('Coiffure enfant', 'Coupe de cheveux pour enfant'), ('Permanente', 'Boucles et ondulations durables'),
+('Tresse africaine', 'Réalisation de tresses'), ('Chignon', 'Coiffure élaborée pour occasions');
 
--- Insertion de 50 enregistrements dans la table 'services'
-INSERT INTO abc_rdv_prd_db.services (nom_service, description ) VALUES
-('Coupe Femme', 'Coupe et shampoing pour cheveux longs ou mi-longs.'					),
-('Coupe Homme', 'Coupe pour cheveux courts.'											),
-('Coupe & Brushing', 'Coupe, shampoing et brushing.'									),
-('Brushing', 'Mise en forme des cheveux avec brosse et sèche-cheveux.'					),
-('Coloration', 'Application d\'une couleur sur l\'ensemble de la chevelure.'			),
-('Mèches', 'Création de mèches plus claires pour un effet de lumière.'					),
-('Balayage', 'Technique d\'éclaircissement plus subtile que les mèches.'				),
-('Barbe', 'Taille et entretien de la barbe.'											),
-('Soins Capillaires', 'Traitement pour hydrater et nourrir les cheveux en profondeur.'	),
-('Coiffure de Soirée', 'Coiffure élaborée pour une occasion spéciale.'					),
-('Lissage Brésilien', 'Lissage durable et soignant.'									),
-('Extension de cheveux', 'Pose d\'extensions pour gagner en volume et en longueur.'		),
-('Coupe Enfant', 'Coupe pour les enfants de moins de 12 ans.'							),
-('Décoloration', 'Éclaircissement de la couleur des cheveux.'							),
-('Permanente', 'Boucles ou ondulations permanentes.'									),
-('Taille de barbe', 'Taille précise de la barbe.'										),
-('Coloration racine', 'Retouche de la couleur à la racine.'								),
-('Mèches partielles', 'Mèches sur une section limitée des cheveux.'						),
-('Balayage partiel', 'Balayage sur une section limitée des cheveux.'					),
-('Chignon', 'Coiffure de soirée en chignon.'											),
-('Coupe Homme + Barbe', 'Coupe pour homme et taille de la barbe.'						),
-('Shampoing + Masque', 'Lavage et soin hydratant.'										),
-('Soin à la kératine', 'Traitement pour cheveux abîmés.'								),
-('Tresse', 'Coiffure avec tresses.'														),
-('Coiffure de mariée', 'Coiffure spéciale pour un mariage.'								),
-('Coloration homme', 'Coloration pour homme.'											),
-('Mèches homme', 'Mèches pour homme.'													),
-('Défrisage', 'Lissage permanent des cheveux.'											),
-('Lissage japonais', 'Lissage permanent et très raide.'									),
-('Taille de la moustache', 'Entretien de la moustache.'									),
-('Teinture de cils', 'Teinture des cils.'												),
-('Épilation du visage', 'Épilation du visage.'											),
-('Soin des mains', 'Manucure simple.'													),
-('Soin des pieds', 'Pédicure simple.'													),
-('Massage du cuir chevelu', 'Massage relaxant.'											),
-('Soin anti-chute', 'Soin pour la prévention de la chute des cheveux.'					),
-('Mèches sur cheveux courts', 'Mèches sur cheveux courts.'								),
-('Coiffure afro', 'Coiffure spécifique pour cheveux afro.'								),
-('Tresses africaines', 'Réalisation de tresses africaines.'								),
-('Coupe de frange', 'Coupe de la frange.'												),
-('Soin express', 'Soin rapide pour cheveux.'											),
-('Coloration ton sur ton', 'Coloration qui ne modifie pas la couleur naturelle.'		),
-('Mèches blondes', 'Mèches pour un effet blond.'										),
-('Mèches rousses', 'Mèches pour un effet roux.'											),
-('Mèches fantaisistes', 'Mèches de couleurs vives.'										),
-('Balayage blond', 'Balayage pour un effet blond.'										),
-('Balayage roux', 'Balayage pour un effet roux.'										),
-('Balayage caramel', 'Balayage pour un effet caramel.'									),
-('Soin du cuir chevelu', 'Soin pour un cuir chevelu sain.'								),
-('Soin anti-pelliculaire', 'Soin pour éliminer les pellicules.'							);
+-- 5. Insertion dans la table 'professionnel_services'
+INSERT INTO professionnel_services (professionnel_id, service_id, prix, duree) VALUES
+(1, 1, 35.00, 30), (1, 2, 50.00, 45), (1, 3, 70.00, 90), (1, 4, 90.00, 120),
+(2, 2, 55.00, 60), (2, 5, 110.00, 150), (2, 6, 80.00, 60), (2, 7, 25.00, 30),
+(3, 1, 30.00, 30), (3, 7, 20.00, 20), (3, 8, 85.00, 90), (4, 2, 60.00, 60),
+(4, 3, 80.00, 90), (5, 3, 75.00, 90), (5, 4, 95.00, 120), (6, 1, 40.00, 45),
+(6, 2, 55.00, 60), (7, 5, 120.00, 150), (8, 5, 130.00, 160), (9, 2, 50.00, 60);
 
+-- 6. Insertion dans la table 'clients'
+INSERT INTO clients (nom, email) VALUES
+('Jean Martin', 'jean.martin@email.fr'), ('Marie Dubois', 'marie.dubois@email.fr'),
+('Pierre Laurent', 'pierre.laurent@email.fr'), ('Sophie Moreau', 'sophie.moreau@email.fr'),
+('Lucie Garcia', 'lucie.garcia@email.fr'), ('Antoine Petit', 'antoine.petit@email.fr'),
+('Isabelle Bernard', 'isabelle.bernard@email.fr'), ('Thomas Lefevre', 'thomas.lefevre@email.fr'),
+('Chloé Robert', 'chloe.robert@email.fr'), ('Nicolas Richard', 'nicolas.richard@email.fr'),
+('Émilie Duval', 'emilie.duval@email.fr'), ('Julien Michel', 'julien.michel@email.fr'),
+('Camille Dupont', 'camille.dupont@email.fr'), ('Léo Girard', 'leo.girard@email.fr'),
+('Manon Lefort', 'manon.lefort@email.fr'), ('Hugo Boyer', 'hugo.boyer@email.fr'),
+('Sarah Vincent', 'sarah.vincent@email.fr'), ('Arthur Roussel', 'arthur.roussel@email.fr'),
+('Emma Faure', 'emma.faure@email.fr'), ('Gabriel Marchand', 'gabriel.marchand@email.fr');
 
+-- 7. Insertion dans la table 'agendas'
+-- Disponibilités pour différents membres de l'équipe sur des jours spécifiques. (0 = disponible, 1 = réservé)
+INSERT INTO agendas (membre_id, date, heure_08h, heure_09h, heure_10h, heure_11h, heure_12h, heure_13h, heure_14h, heure_15h, heure_16h, heure_17h, heure_18h) VALUES
+(1, '2025-10-20', 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0), -- Julie Dupont
+(2, '2025-10-20', 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0), -- Marc Lefevre
+(3, '2025-10-20', 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0), -- Sophie Bernard
+(4, '2025-09-17', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), -- David Martin
+(4, '2025-09-16', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), -- David Martin
+(4, '2025-09-18', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), -- David Martin
+(4, '2025-09-19', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), -- David Martin
+(5, '2025-10-16', 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0), -- Emilie Durand
+(6, '2025-10-22', 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0), -- Pierre Dubois
+(7, '2025-10-22', 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0), -- Laura Petit
+(8, '2025-10-23', 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0), -- Alexandre Rousseau
+(9, '2025-10-23', 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0), -- Caroline Blanc
+(10, '2025-10-24', 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0), -- Nicolas Lambert
+(11, '2025-10-24', 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0), -- Marie Leroy
+(12, '2025-10-25', 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0), -- Thomas Moreau
+(13, '2025-10-25', 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0), -- Clara Fournier
+(14, '2025-10-26', 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0), -- Lucas Girard
+(15, '2025-10-26', 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0), -- Amélie Bonnet
+(16, '2025-10-27', 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0), -- Fabien Garcia
+(17, '2025-10-27', 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0), -- Chloé Roux
+(18, '2025-10-28', 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0), -- Vincent Chen
+(19, '2025-10-28', 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0), -- Manon Lopez
+(20, '2025-10-29', 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0); -- Hugo Sanchez
 
--- Insertion de 50 enregistrements dans la table 'reservations'
-INSERT INTO abc_rdv_prd_db.reservations (date_reservation, heure_reservation, client_id, professionnel_id, service_id) VALUES
-('2022-10-01', '08:00:00', 1, 1, 1),('2023-10-01', '09:00:00', 1, 1, 1),('2024-10-01', '10:00:00', 1, 1, 1),
-('2024-10-01', '14:30:00', 2, 2, 4),
-('2024-10-02', '11:00:00', 3, 3, 2),('2025-10-02', '12:00:00', 3, 3, 2),
-('2024-10-02', '16:00:00', 4, 4, 6),
-('2024-10-03', '09:30:00', 5, 5, 3),
-('2024-10-03', '15:00:00', 6, 6, 8),
-('2024-10-04', '10:30:00', 7, 7, 5),
-('2024-10-04', '13:00:00', 8, 8, 6),
-('2024-10-05', '11:00:00', 9, 9, 4),
-('2024-10-05', '16:00:00', 10, 10, 2),
-('2024-10-06', '09:00:00', 11, 11, 1),
-('2024-10-06', '14:00:00', 12, 12, 8),
-('2024-10-07', '10:00:00', 13, 13, 9),
-('2024-10-07', '15:30:00', 14, 14, 7),
-('2024-10-08', '11:00:00', 15, 15, 13),
-('2024-10-08', '16:00:00', 16, 16, 14),
-('2024-10-09', '09:30:00', 17, 17, 10),
-('2024-10-09', '15:00:00', 18, 18, 11),
-('2024-10-10', '10:30:00', 19, 19, 12),
-('2024-10-10', '13:00:00', 20, 20, 15),
-('2024-10-11', '11:00:00', 21, 21, 1),
-('2024-10-11', '16:00:00', 22, 22, 4),('2024-08-11', '14:00:00', 22, 22, 4),('2024-06-11', '112:00:00', 22, 22, 4),
-('2024-10-12', '09:00:00', 23, 23, 7),
-('2024-10-12', '14:00:00', 24, 24, 1),
-('2024-10-13', '10:00:00', 25, 25, 2),
-('2024-10-13', '15:30:00', 26, 26, 3),
-('2024-10-14', '11:00:00', 27, 27, 4),
-('2024-10-14', '16:00:00', 28, 28, 1),
-('2024-10-15', '09:30:00', 29, 29, 6),
-('2024-10-15', '15:00:00', 30, 30, 8),
-('2024-10-16', '10:30:00', 31, 31, 2),
-('2024-10-16', '13:00:00', 32, 32, 11),
-('2024-10-17', '11:00:00', 33, 33, 9),
-('2024-10-17', '16:00:00', 34, 34, 7),
-('2024-10-18', '09:00:00', 35, 35, 14),
-('2024-10-18', '14:00:00', 36, 36, 10),
-('2024-10-19', '10:00:00', 37, 37, 10),
-('2024-10-19', '15:30:00', 38, 38, 13),
-('2024-10-20', '11:00:00', 39, 39, 12),
-('2024-10-20', '16:00:00', 40, 40, 15),
-('2024-10-21', '09:30:00', 41, 41, 1),
-('2024-10-21', '15:00:00', 42, 42, 2),
-('2024-10-22', '10:30:00', 43, 43, 4),
-('2024-10-22', '13:00:00', 44, 44, 5),
-('2024-10-23', '11:00:00', 45, 45, 2),
-('2024-10-23', '16:00:00', 46, 46, 3),
-('2024-10-24', '09:00:00', 47, 47, 8),
-('2024-10-24', '14:00:00', 48, 48, 11),
-('2024-10-25', '10:00:00', 49, 49, 9),
-('2024-10-25', '15:30:00', 50, 50, 7);
+-- 8. Insertion dans la table 'reservations'
+-- Les réservations sont liées aux agendas et aux membres d'équipe.
+INSERT INTO reservations (client_id, professionnel_id, membre_id, service_id, agenda_id, heure_rdv) VALUES
+(1, 1, 1, 2, 1, '09:00:00'), (2, 2, 4, 5, 4, '14:00:00'), (3, 3, 6, 7, 6, '11:00:00'),
+(4, 4, 8, 2, 8, '10:00:00'), (5, 5, 9, 3, 9, '13:00:00'), (6, 6, 10, 1, 10, '09:00:00'),
+(7, 7, 11, 5, 11, '14:00:00'), (8, 8, 12, 5, 12, '13:00:00'), (9, 9, 13, 2, 13, '14:00:00'),
+(10, 10, 14, 3, 14, '10:00:00'), (11, 11, 15, 2, 15, '11:00:00'), (12, 12, 16, 5, 16, '13:00:00'),
+(13, 13, 17, 4, 17, '16:00:00'), (14, 14, 18, 3, 18, '14:00:00'), (15, 15, 19, 2, 19, '13:00:00'),
+(16, 16, 20, 1, 20, '10:00:00'), (17, 1, 2, 3, 2, '08:00:00'), (18, 2, 5, 6, 5, '08:00:00'),
+(19, 3, 7, 8, 7, '09:00:00'), (20, 4, 8, 3, 8, '12:00:00');
 
-
--- Insertion de 50 enregistrements dans la table 'avis'
-INSERT INTO abc_rdv_prd_db.avis (note, commentaire, client_id, professionnel_id) VALUES
-(5, 'Excellent service, très professionnel.', 1, 1),
-(4, 'Bonne coupe, mais un peu d\'attente.', 2, 2),
-(5, 'Rapide et efficace, je recommande.', 3, 3),
-(5, 'Le balayage est parfait, exactement ce que je voulais.', 4, 4),
-(4, 'Très bon accueil, la coupe est bien.', 5, 5),
-(5, 'Taille de barbe parfaite.', 6, 6),
-(5, 'J\'adore ma nouvelle couleur, merci !', 7, 7),
-(3, 'Satisfaite, mais le prix est un peu élevé.', 8, 8),
-(4, 'Brushing impeccable.', 9, 9),
-(5, 'Superbe coupe, très à l\'aise.', 10, 10),
-(5, 'Coupe et brushing au top.', 11, 11),
-(4, 'Super barbier, très précis.', 12, 12),
-(5, 'Soins exceptionnels, mes cheveux sont magnifiques.', 13, 13),
-(5, 'Balayage très naturel, j\'y retournerai.', 14, 14),
-(4, 'Coupe pour enfant réussie.', 15, 15),
-(5, 'Décoloration sans aucun dommage.', 16, 16),
-(5, 'Coiffure de soirée sublime.', 17, 17),
-(4, 'Lissage brésilien efficace.', 18, 18),
-(5, 'J\'adore mes extensions, très naturelles.', 19, 19),
-(5, 'Permanente parfaite, les boucles tiennent.', 20, 20),
-(5, 'Très bon accueil, service impeccable.', 21, 21),
-(4, 'Super brushing, mais un peu long.', 22, 22),
-(5, 'Balayage exceptionnel.', 23, 23),
-(5, 'Service très pro, rien à dire.', 24, 24),
-(4, 'Coupe homme classique et efficace.', 25, 25),
-(5, 'Coupe et brushing impeccables.', 26, 26),
-(5, 'Le brushing est parfait.', 27, 27),
-(4, 'Coupe homme réussie, mais un peu d\'attente.', 28, 28),
-(5, 'J\'adore mes mèches.', 29, 29),
-(5, 'Taille de barbe au top.', 30, 30),
-(4, 'Coupe classique et propre.', 31, 31),
-(5, 'Lissage brésilien très réussi.', 32, 32),
-(5, 'Soins profonds, mes cheveux revivent.', 33, 33),
-(4, 'Balayage subtil et réussi.', 34, 34),
-(5, 'Décoloration parfaite.', 35, 35),
-(5, 'Coiffure de soirée magnifique.', 36, 36),
-(4, 'Coiffure de soirée très créative.', 37, 37),
-(5, 'Coupe pour enfant bien faite.', 38, 38),
-(5, 'Extensions très bien posées.', 39, 39),
-(4, 'Permanente bien faite, je suis contente.', 40, 40),
-(5, 'Coupe femme parfaite.', 41, 41),
-(5, 'Coupe homme très réussie.', 42, 42),
-(4, 'Brushing impeccable.', 43, 43),
-(5, 'Coloration très bien faite.', 44, 44),
-(5, 'Coupe homme réussie.', 45, 45),
-(4, 'Coupe et brushing efficaces.', 46, 46),
-(5, 'Barbe bien taillée.', 47, 47),
-(5, 'Lissage brésilien parfait.', 48, 48),
-(4, 'Soins capillaires très agréables.', 49, 49),
-(5, 'Balayage parfait, je reviendrai.', 50, 50);
+-- 9. Insertion dans la table 'avis'
+INSERT INTO avis (note, commentaire, client_id, professionnel_id) VALUES
+(5, 'Excellent service, je suis très satisfait.', 1, 1), (4, 'Bonne coupe, rapide et efficace.', 2, 2),
+(5, 'Le barbier est très professionnel.', 3, 3), (3, 'Salon agréable, mais un peu d\'attente.', 4, 4),
+(5, 'Ma couleur est parfaite, merci !', 5, 5), (4, 'Bonne ambiance, personnel sympathique.', 6, 6),
+(5, 'Un vrai artiste, j\'adore ma nouvelle coupe.', 7, 7), (5, 'Le résultat est incroyable, je recommande.', 8, 8),
+(4, 'Très bon rapport qualité-prix.', 9, 9), (3, 'J\'attendais un résultat plus original.', 10, 10),
+(5, 'Salon très propre et accueillant.', 11, 11), (5, 'Meilleur service que j\'ai jamais eu.', 12, 12),
+(4, 'Une belle découverte, je reviendrai.', 13, 13), (5, 'Le coiffeur a parfaitement compris mes attentes.', 14, 14),
+(4, 'Un peu cher, mais la qualité est là.', 15, 15), (5, 'Très bon coiffeur pour homme.', 16, 16),
+(5, 'Super soin, mes cheveux revivent !', 17, 1), (4, 'Bonne ambiance et coiffeur à l\'écoute.', 18, 2),
+(5, 'Le meilleur salon de la ville !', 19, 3), (4, 'Je suis très content du résultat.', 20, 4);
