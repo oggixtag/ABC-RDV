@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS abc_rdv_prd_db.villes (
 	nom_ville VARCHAR(255) NOT NULL UNIQUE
 );
 
--- Création de la table 'professionnels' avec une clé étrangère vers 'cilles'
+-- Création de la table 'professionnels'
 CREATE TABLE IF NOT EXISTS abc_rdv_prd_db.professionnels (
 	professionnel_id INT AUTO_INCREMENT PRIMARY KEY,
 	nom VARCHAR(255) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS abc_rdv_prd_db.professionnel_services (
 	FOREIGN KEY (service_id) REFERENCES abc_rdv_prd_db.services(service_id)
 );
 
--- Création de la nouvelle table agendas pour gérer les créneaux horaires
+-- Création de la table 'agendas' pour gérer les créneaux horaires
 CREATE TABLE IF NOT EXISTS abc_rdv_prd_db.agendas (
 	agenda_id INT PRIMARY KEY AUTO_INCREMENT,
 	membre_id INT NOT NULL,
@@ -81,8 +81,7 @@ CREATE TABLE IF NOT EXISTS abc_rdv_prd_db.reservations (
 	professionnel_id INT NOT NULL,
 	membre_id INT NOT NULL,
 	service_id INT NOT NULL,
-	agenda_id INT NOT NULL, -- Clé étrangère vers la table agendas
-	heure_rdv TIME NOT NULL, -- Heure précise du début du rdv
+	agenda_id INT NOT NULL,
 	date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (client_id) REFERENCES abc_rdv_prd_db.clients(client_id),
 	FOREIGN KEY (professionnel_id) REFERENCES abc_rdv_prd_db.professionnels(professionnel_id),
@@ -91,7 +90,7 @@ CREATE TABLE IF NOT EXISTS abc_rdv_prd_db.reservations (
 	FOREIGN KEY (agenda_id) REFERENCES abc_rdv_prd_db.agendas(agenda_id)
 );
 
--- Création de la table 'Avis'
+-- Création de la table 'avis'
 CREATE TABLE IF NOT EXISTS abc_rdv_prd_db.avis (
 	avis_id INT AUTO_INCREMENT PRIMARY KEY,
 	note INT,
