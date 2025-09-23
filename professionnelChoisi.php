@@ -5,18 +5,18 @@
 <body>
     <!-- Header -->
     <?php include 'header.php'; ?>
-    <!-- Navigation Menu -->
-    <?php include 'navigation.php'; ?>
     <!-- Main page Je suis Professionnel-->
     <main>
-        <h2>page Je suis Professionnel</h2>
         <?php
         
+		//var_dump('professionnel_id: '.$_GET['professionnel_id']);
+		//var_dump('ville_id: '.$_GET['ville_id']);
+		
         // Configuration de la base de données
-		$host = "localhost";
-		$user = "abc_rdv_prd_useradm";
-		$password = "";
-		$dbname = "abc_rdv_prd_db";
+		$host = "mysql-abcrdv.alwaysdata.net";
+		$user = "abcrdv";
+		$password = "*E8D46CE25265E545D225A8A6F1BAF642FEBEE5CB";
+		$dbname = "abcrdv_prd_db";
 
         // Établir la connexion à la base de données
         $connexion = new mysqli($host, $user, $password, $dbname);
@@ -38,7 +38,7 @@
                     p.professionnel_id,
                     p.nom,
                     p.adresse
-                FROM abc_rdv_prd_db.professionnels p
+                FROM abcrdv_prd_db.professionnels p
                 WHERE
                     p.professionnel_id = ?;
             ";
@@ -61,9 +61,9 @@
                     s.description,
                     ps.prix,
                     ps.duree
-                FROM abc_rdv_prd_db.professionnels p
-                JOIN abc_rdv_prd_db.professionnel_services ps ON ps.professionnel_id = p.professionnel_id
-                JOIN abc_rdv_prd_db.services s ON s.service_id = ps.service_id
+                FROM abcrdv_prd_db.professionnels p
+                JOIN abcrdv_prd_db.professionnel_services ps ON ps.professionnel_id = p.professionnel_id
+                JOIN abcrdv_prd_db.services s ON s.service_id = ps.service_id
                 WHERE
                     p.professionnel_id = ?
                 ORDER BY s.nom_service;
@@ -80,24 +80,35 @@
             }
             $stmt_services->close();
         }
-        
+		
+		if (isset($_GET['ville_id']) && !empty($_GET['ville_id'])) {
+			$ville_id = $_GET['ville_id'];
+			
+			// Étape 1 : Gérer l'enregistrement du client
+			$sql_ville_nom = "SELECT nom_ville FROM abcrdv_prd_db.villes WHERE ville_id = ?";
+			$stmt_ville_nom = $connexion->prepare($sql_ville_nom);
+			$stmt_ville_nom->bind_param("s", $ville_id);
+			$stmt_ville_nom->execute();
+			$result_ville = $stmt_ville_nom->get_result();
+			$ville_row = $result_ville->fetch_assoc();
+			
+			//var_dump($ville_row);
+			//var_dump($ville_row['nom_ville']);
+			
+			$stmt_ville_nom->close();
+		}
+		
         $connexion->close();
         ?>
         
-        <?php if ($info_professionnel) : ?>
-        <div>
-            <div>
-                Nom du professionnel: <?php echo htmlspecialchars($info_professionnel['nom']); ?>
-            </div>
-            <div>
-                Adresse: <?php echo htmlspecialchars($info_professionnel['adresse']); ?>
-            </div>
-        </div>
+		<?php if ($info_professionnel) : ?>
+			<div class="section">
+				<h2>Nom du professionnel: <?php echo htmlspecialchars($info_professionnel['nom']); ?></h2>
+				<h2>Adresse: <?php echo htmlspecialchars($info_professionnel['adresse']); ?></h2>
+			</div>
         <?php else: ?>
-        <p>Professionnel non trouvé.</p>
+			<div class="pty20 no-results">Professionnel non trouvé.</div>
         <?php endif; ?>
-
-        <br><br>
         
         <div class="services-group">
             <?php if (!empty($services_disponibles)): ?>
@@ -121,9 +132,12 @@
             <?php endif; ?>
         </div>
 
-        <br><br>
+        <hr>
         
-        <a href="rechercheProParVille.php">Retour à la liste de professionnel</a>
+
+		<div class="button-style text_align_center"> 
+			<a href="rechercheProParVille.php?ville=<?= htmlspecialchars($ville_row['nom_ville']); ?>">Retour à la liste des professionnels de la ville de <?= htmlspecialchars($ville_row['nom_ville']); ?></a>
+		</div>
         
     </main>
     <!-- Footer -->

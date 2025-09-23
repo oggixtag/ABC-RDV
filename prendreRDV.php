@@ -81,17 +81,15 @@
 <body>
     <!-- Header -->
     <?php include 'header.php'; ?>
-    <!-- Navigation Menu -->
-    <?php include 'navigation.php'; ?>
     <!-- Main page Je prend RDV-->
     <main>
         <div class="container">
             <?php
             // Configuration de la base de données
-            $host = "localhost";
-            $user = "abc_rdv_prd_useradm";
-            $password = "";
-            $dbname = "abc_rdv_prd_db";
+            $host = "mysql-abcrdv.alwaysdata.net";
+            $user = "abcrdv";
+            $password = "*E8D46CE25265E545D225A8A6F1BAF642FEBEE5CB";
+            $dbname = "abcrdv_prd_db";
 
             // Établir la connexion à la base de données
             $connexion = new mysqli($host, $user, $password, $dbname);
@@ -101,6 +99,16 @@
                 die("Échec de la connexion à la base de données : " . $connexion->connect_error);
             }
 
+			/*var_dump(
+					$_POST['professionnel_id']	 . ";" .
+					$_POST['service_id']		 . ";" .
+					$_POST['membre_id']			 . ";" .
+					$_POST['date_rdv']			 . ";" .
+					$_POST['heure_rdv']			 . ";" .
+					$_POST['client_nom']		 . ";" .
+					$_POST['client_email']		 
+			);*/
+			
             // Récupération des données passées par la méthode POST
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $professionnel_id = $_POST['professionnel_id'] ?? null;
@@ -109,7 +117,7 @@
                 if ($professionnel_id) {
                     
                     // 1. Récupérer les informations du professionnel
-                    $sql_pro = "SELECT nom FROM abc_rdv_prd_db.professionnels WHERE professionnel_id = ?";
+                    $sql_pro = "SELECT nom FROM abcrdv_prd_db.professionnels WHERE professionnel_id = ?";
                     $stmt_pro = $connexion->prepare($sql_pro);
                     $stmt_pro->bind_param("i", $professionnel_id);
                     $stmt_pro->execute();
@@ -121,8 +129,8 @@
                     $service_initial = null;
                     $services_all = [];
                     $sql_initial = "SELECT s.service_id, s.nom_service, s.description, ps.prix, ps.duree
-                                     FROM abc_rdv_prd_db.professionnel_services ps
-                                     JOIN abc_rdv_prd_db.services s ON s.service_id = ps.service_id
+                                     FROM abcrdv_prd_db.professionnel_services ps
+                                     JOIN abcrdv_prd_db.services s ON s.service_id = ps.service_id
                                      WHERE ps.professionnel_id = ?";
                     $stmt_services = $connexion->prepare($sql_initial);
                     $stmt_services->bind_param("i", $professionnel_id);
@@ -134,11 +142,11 @@
                         }
                         $services_all[] = $row;
                     }
-                    $stmt_services->close();
+                    $stmt_services->close();		
                     
                     // 3. Récupérer les membres de l'équipe du professionnel
                     $membres_equipe = [];
-                    $sql_membres = "SELECT membre_id, nom_membre FROM abc_rdv_prd_db.membres_equipe WHERE professionnel_id = ?";
+                    $sql_membres = "SELECT membre_id, nom_membre FROM abcrdv_prd_db.membres_equipe WHERE professionnel_id = ?";
                     $stmt_membres = $connexion->prepare($sql_membres);
                     $stmt_membres->bind_param("i", $professionnel_id);
                     $stmt_membres->execute();
@@ -148,12 +156,13 @@
 
                     // 4. Récupérer les disponibilités réelles des membres depuis la table 'agendas'
                     $disponibilites = [];
+					
                     // Pour éviter les erreurs si la liste des membres est vide
                     if (!empty($membres_equipe)) {
                         $membre_ids = array_column($membres_equipe, 'membre_id');
                         $placeholders = implode(',', array_fill(0, count($membre_ids), '?'));
                         
-                        $sql_dispos = "SELECT membre_id, date, heure_08h, heure_09h, heure_10h, heure_11h, heure_12h, heure_13h, heure_14h, heure_15h, heure_16h, heure_17h, heure_18h FROM abc_rdv_prd_db.agendas WHERE membre_id IN ($placeholders)";
+                        $sql_dispos = "SELECT membre_id, date, heure_08h, heure_09h, heure_10h, heure_11h, heure_12h, heure_13h, heure_14h, heure_15h, heure_16h, heure_17h, heure_18h FROM abcrdv_prd_db.agendas WHERE membre_id IN ($placeholders)";
                         $stmt_dispos = $connexion->prepare($sql_dispos);
                         $types = str_repeat('i', count($membre_ids));
                         $stmt_dispos->bind_param($types, ...$membre_ids);
@@ -200,9 +209,17 @@
                     
                     if ($professionnel && $service_initial) {
                         ?>
-                        <h2>Prise de rendez-vous avec <?php echo htmlspecialchars($professionnel['nom']); ?></h2>
-                        <h3>Services proposés :</h3>
-                        
+						<div class="header-container">
+							<div class="header-item">
+								<h2>Prise de rendez-vous avec <?php echo htmlspecialchars($professionnel['nom']); ?></h2>
+							</div>
+							<div class="header-item">
+								<h3 class="button-style"><a href="professionnelChoisi.php?professionnel_id=<?php echo htmlspecialchars($professionnel_id); ?>">Retour à la liste des services</a></h3>
+							</div>
+						</div>
+						<div >
+							<h3>Service choisi :</h3>
+						</div>                        
                         <form action="traitementRdv.php" method="post">
                             <input type="hidden" name="professionnel_id" value="<?php echo htmlspecialchars($professionnel_id); ?>">
                             <input type="hidden" name="service_id" id="service_id" value="<?php echo htmlspecialchars($service_initial['service_id']); ?>">
@@ -235,28 +252,8 @@
                                 endforeach; ?>
                             </div>
 
-                            <!-- Bouton pour afficher les autres services -->
-                            <?php 
-                            $services_du_pro = array_filter($services_all, function($s) use ($service_id_initial) {
-                                return $s['service_id'] != $service_id_initial;
-                            });
-                            if (!empty($services_du_pro)): ?>
-                                <button id="toggleButton">Afficher plus de services</button>
-                                <div id="hiddenServices" class="hidden-services">
-                                    <div class="services-list">
-                                        <?php foreach ($services_du_pro as $service): ?>
-                                            <div class="service-item">
-                                                <button type="button" class="select-service-btn" 
-                                                    data-service-id="<?php echo htmlspecialchars($service['service_id']); ?>"
-                                                    data-duree="<?php echo htmlspecialchars($service['duree']); ?>">Sélectionner</button>
-                                                <h4><?php echo htmlspecialchars($service['nom_service']); ?></h4>
-                                                <p><?php echo htmlspecialchars($service['description']); ?></p>
-                                                <p>Prix: <?php echo htmlspecialchars($service['prix']); ?>€ | Durée: <?php echo htmlspecialchars($service['duree']); ?> min</p>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                            <?php endif; ?>
+                            <!-- Bouton pour afficher les autres services -->							
+							<!-- ---------------------------------------- -->
 
                             <!-- Section Agenda Dynamique -->
                             <div class="agenda-container">
@@ -268,28 +265,33 @@
                                 </div>
                                 <div id="calendar" class="calendar-grid"></div>
                             </div>
+							
+							<hr>
 
                             <!-- Autres informations (client) -->
-                            <div class="form-group">
-                                <label for="client_nom">Votre nom:</label>
-                                <input type="text" id="client_nom" name="client_nom" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="client_email">Votre email:</label>
-                                <input type="email" id="client_email" name="client_email" required>
-                            </div>
+							<h3>Réservez votre créneau pour la prestation choisi:</h3>
+							<div class="form-fields">							
+								<div class="form-group">
+									<label for="client_nom">Votre nom:</label>
+									<input type="text" id="client_nom" name="client_nom" required>
+								</div>
+								<div class="form-group">
+									<label for="client_email">Votre email:</label>
+									<input type="email" id="client_email" name="client_email" required>
+								</div>
+							</div>
 
-                            <button type="submit">Confirmer le rendez-vous</button>
+                            <button type="submit" class="submit-button">Confirmer le rendez-vous</button>
                         </form>
                         <?php
                     } else {
-                        echo "<p class='error-message'>Erreur : Le professionnel ou le service initial n'existent pas.</p>";
+                        echo "<p class='no-results'>Erreur : Le professionnel ou le service initial n'existent pas.</p>";
                     }
                 } else {
-                    echo "<p class='error-message'>Erreur : Les informations du professionnel sont manquantes.</p>";
+                    echo "<p class='no-results'>Erreur : Les informations du professionnel sont manquantes.</p>";
                 }
             } else {
-                echo "<p class='error-message'>Accès invalide à cette page.</p>";
+                echo "<p class='no-results'>Accès invalide à cette page.</p>";
             }
 
             $connexion->close();
