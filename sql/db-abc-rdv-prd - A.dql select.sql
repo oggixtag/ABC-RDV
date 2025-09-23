@@ -1,7 +1,7 @@
 /*
 Ce fichier ne doit pas être exécuté. Il contient des requêtes SQL pour interagir avec la base de données du projet ABC-RDV.
 Il est destiné à être utilisé comme référence pour les développeurs et les administrateurs de la base de données.
-Exploitation données dans l'environnement de production, abc_rdv_prd_db.
+Exploitation données dans l'environnement de production, abcrdv_prd_db.
 */
 
 -- 1. RECHERCHE DE PROFESSIONNELS
@@ -9,8 +9,8 @@ Exploitation données dans l'environnement de production, abc_rdv_prd_db.
 SELECT
     p.nom,
     p.adresse
-FROM abc_rdv_prd_db.professionnels p
-JOIN abc_rdv_prd_db.villes v ON p.ville_id = v.ville_id
+FROM abcrdv_prd_db.professionnels p
+JOIN abcrdv_prd_db.villes v ON p.ville_id = v.ville_id
 WHERE
     v.nom_ville = 'Paris';
 
@@ -19,9 +19,9 @@ SELECT
     p.nom,
     p.adresse,
     s.nom_service
-FROM abc_rdv_prd_db.professionnels p
-JOIN abc_rdv_prd_db.professionnel_services ps ON p.professionnel_id = ps.professionnel_id
-JOIN abc_rdv_prd_db.services s ON ps.service_id = s.service_id
+FROM abcrdv_prd_db.professionnels p
+JOIN abcrdv_prd_db.professionnel_services ps ON p.professionnel_id = ps.professionnel_id
+JOIN abcrdv_prd_db.services s ON ps.service_id = s.service_id
 WHERE
     s.nom_service = 'Coloration';
 
@@ -31,10 +31,10 @@ SELECT
     p.adresse,
     s.nom_service,
     s.description
-FROM abc_rdv_prd_db.professionnels p
-JOIN abc_rdv_prd_db.villes v ON p.ville_id = v.ville_id
-JOIN abc_rdv_prd_db.professionnel_services ps ON p.professionnel_id = ps.professionnel_id
-JOIN abc_rdv_prd_db.services s ON ps.service_id = s.service_id
+FROM abcrdv_prd_db.professionnels p
+JOIN abcrdv_prd_db.villes v ON p.ville_id = v.ville_id
+JOIN abcrdv_prd_db.professionnel_services ps ON p.professionnel_id = ps.professionnel_id
+JOIN abcrdv_prd_db.services s ON ps.service_id = s.service_id
 WHERE
     v.nom_ville = ?
 ORDER BY p.nom,s.nom_service ;
@@ -48,11 +48,11 @@ SELECT
     r.heure_reservation,
     p.nom AS nom_professionnel,
     s.nom_service
-FROM abc_rdv_prd_db.reservations r
-JOIN abc_rdv_prd_db.clients c ON r.client_id = c.client_id
-JOIN abc_rdv_prd_db.professionnels p ON r.professionnel_id = p.professionnel_id
-JOIN abc_rdv_prd_db.professionnel_services ps ON p.professionnel_id = ps.professionnel_id
-JOIN abc_rdv_prd_db.services s ON r.service_id = s.service_id
+FROM abcrdv_prd_db.reservations r
+JOIN abcrdv_prd_db.clients c ON r.client_id = c.client_id
+JOIN abcrdv_prd_db.professionnels p ON r.professionnel_id = p.professionnel_id
+JOIN abcrdv_prd_db.professionnel_services ps ON p.professionnel_id = ps.professionnel_id
+JOIN abcrdv_prd_db.services s ON r.service_id = s.service_id
 WHERE
     c.client_id = 1
 ORDER BY
@@ -63,9 +63,9 @@ SELECT
     r.heure_reservation,
     c.nom AS nom_client,
     s.nom_service
-FROM abc_rdv_prd_db.reservations r
-JOIN abc_rdv_prd_db.clients c ON r.client_id = c.client_id
-JOIN abc_rdv_prd_db.services s ON r.service_id = s.service_id
+FROM abcrdv_prd_db.reservations r
+JOIN abcrdv_prd_db.clients c ON r.client_id = c.client_id
+JOIN abcrdv_prd_db.services s ON r.service_id = s.service_id
 WHERE
     r.professionnel_id = 1 AND r.date_reservation = '2023-10-27'
 ORDER BY
@@ -78,8 +78,8 @@ ORDER BY
 SELECT
     p.nom,
     AVG(a.note) AS note_moyenne
-FROM abc_rdv_prd_db.avis a
-JOIN abc_rdv_prd_db.professionnels p ON a.professionnel_id = p.professionnel_id
+FROM abcrdv_prd_db.avis a
+JOIN abcrdv_prd_db.professionnels p ON a.professionnel_id = p.professionnel_id
 GROUP BY
     p.nom
 ORDER BY
@@ -89,8 +89,8 @@ ORDER BY
 SELECT
     s.nom_service,
     COUNT(1) AS nombre_reservations
-FROM abc_rdv_prd_db.reservations r
-JOIN abc_rdv_prd_db.services s ON r.service_id = s.service_id
+FROM abcrdv_prd_db.reservations r
+JOIN abcrdv_prd_db.services s ON r.service_id = s.service_id
 GROUP BY
     s.nom_service
 ORDER BY
@@ -98,7 +98,7 @@ ORDER BY
 
 -- Cette requête trouve les clients ayant fait plus d'une réservation
 select COUNT(1) count, r.client_id 
-from abc_rdv_prd_db.reservations r 
+from abcrdv_prd_db.reservations r 
 group by  r.client_id having  COUNT(1) > 1 ;
 
 
